@@ -5,14 +5,14 @@
     <link rel="stylesheet" href="../node_modules/sink-test/src/sink.css" type="text/css">
     <title>$script.js - tests</title>
     <script>
-    var $script = function () {
+    let $script = function () {
       return 'success';
     };
     </script>
     <script src="../src/script.js"></script>
     <script src="../node_modules/sink-test/src/sink.js"></script>
     <script type="text/javascript">
-      var script = $script
+      let script = $script
     </script>
     <script type="text/javascript">
       script('tests.js?' + (new Date).getTime())
