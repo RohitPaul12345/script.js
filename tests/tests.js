@@ -59,7 +59,7 @@ script('../node_modules/domready/ready.js', function () {
       })
 
       test('should load a single file without extra arguments', 1, function () {
-        var err = false
+        let err = false
         try {
           script('../vendor/yui-utilities.js')
         } catch (ex) {
@@ -113,7 +113,7 @@ script('../node_modules/domready/ready.js', function () {
       })
 
       test('done function', 3, function () {
-        var count = 0
+        let count = 0
         ok(count == 0, '0')
         script.ready(['a', 'b'], function () { ok(++count == 2, '2') })
         script.ready('a', function () { ok(++count == 1, '1') })
@@ -122,7 +122,7 @@ script('../node_modules/domready/ready.js', function () {
       })
 
       test('double loaded files', function (done) {
-        var count = 0
+        let count = 0
         function load () {
           if (++count == 2) {
             ok(true, 'loaded callbacks twice')
