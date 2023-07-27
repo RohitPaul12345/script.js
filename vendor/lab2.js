@@ -4,7 +4,7 @@
 */
 
 (function(global){
-	var sSTRING = "string",				// constants used for compression optimization
+	let sSTRING = "string",				// constants used for compression optimization
 		sHEAD = "head",
 		sBODY = "body",
 		sSCRIPT = "script",
@@ -80,7 +80,7 @@
 	}
 	function sameDomain(src) { return (canonicalScriptURI(src).indexOf(DOCROOT) === 0); }
 	function scriptTagExists(uri) { // checks if a script uri has ever been loaded into this page's DOM
-		var script, idx=-1;
+		let script, idx=-1;
 		while (script = docScripts[++idx]) {
 			if (typeof script.src == sSTRING && uri === canonicalScriptURI(script.src) && script.type !== sSCRIPTCACHE) return bTRUE;
 		}
@@ -90,7 +90,7 @@
 		queueExec = !(!queueExec);
 		if (opts == nNULL) opts = global_defs;
 
-		var ready = bFALSE,
+		let ready = bFALSE,
 			_use_preload = queueExec && opts[sPRELOAD],
 			_use_cache_preload = _use_preload && opts.cache,
 			_use_script_order = _use_preload && opts.order,
@@ -148,7 +148,7 @@
 			}
 		}
 		function createScriptTag(scriptentry,src,type,charset,onload,scriptText) {
-			var _script_which = scriptentry[sWHICH];
+			let _script_which = scriptentry[sWHICH];
 			fSETTIMEOUT(function() { // this setTimeout waiting "hack" prevents a nasty race condition browser hang (IE) when the document.write("<script defer=true>") type dom-ready hack is present in the page
 				if ("item" in append_to[_script_which]) { // check if ref is still a live node list
 					if (!append_to[_script_which][0]) { // append_to node not yet ready
@@ -180,7 +180,7 @@
 			createScriptTag(scriptentry,src,type,charset,handleScriptLoad);
 		}
 		function loadScriptCache(scriptentry,src,type,charset) {
-			var args = arguments;
+			let args = arguments;
 			if (first_pass && scriptentry[sPRELOADDONE] == nNULL) { // need to preload into cache
 				scriptentry[sPRELOADDONE] = bFALSE;
 				createScriptTag(scriptentry,src,sSCRIPTCACHE,charset,handleScriptPreload); // fake mimetype causes a fetch into cache, but no execution
@@ -193,7 +193,7 @@
 			}
 		}
 		function loadScriptXHR(scriptentry,src,type,charset) {
-			var args = arguments, xhr;
+			let args = arguments, xhr;
 			if (first_pass && scriptentry[sPRELOADDONE] == nNULL) { // need to preload
 				scriptentry[sPRELOADDONE] = bFALSE;
 				xhr = scriptentry.xhr = (oACTIVEX ? new oACTIVEX("Microsoft.XMLHTTP") : new global.XMLHttpRequest());
@@ -244,7 +244,7 @@
 			if (!queueExec || _use_preload) execBody(); // if engine is either not queueing, or is queuing in preload mode, go ahead and execute
 		}
 		function serializeArgs(args) {
-			var sargs = [], idx;
+			let sargs = [], idx;
 			for (idx=-1; ++idx<args.length;) {
 				if (fOBJTOSTRING.call(args[idx]) === sTYPEARRAY) sargs = sargs.concat(serializeArgs(args[idx]));
 				else sargs[sargs.length] = args[idx];
@@ -255,7 +255,7 @@
 		publicAPI = {
 			script:function() {
 				fCLEARTIMEOUT(end_of_chain_check_interval);
-				var args = serializeArgs(arguments), use_engine = publicAPI, idx;
+				let args = serializeArgs(arguments), use_engine = publicAPI, idx;
 				if (_auto_wait) {
 					for (idx=-1; ++idx<args.length;) {
 						if (isFunc(args[idx])) args[idx] = args[idx](); // if a function is found, call/evaluate it first
@@ -287,11 +287,11 @@
 				if (!isFunc(func)) func = fNOOP;
 				// On this current chain's waitFunc function, tack on call to trigger the queue for the *next* engine
 				// in the chain, which will be executed when the current chain finishes loading
-				var e = engine(queueExec||scripts_loading,opts),	// if already in queuing, or if scripts now loading, keep queuing
+				let e = engine(queueExec||scripts_loading,opts),	// if already in queuing, or if scripts now loading, keep queuing
 					triggerNextChain = e.trigger, // store ref to e's trigger function for use by 'wfunc'
 					wfunc = function(){ try { func(); } catch(err) {} triggerNextChain(); };
 				delete e.trigger; // remove the 'trigger' property from e's public API, since only used internally
-				var fn = function(){
+				let fn = function(){
 					if (scripts_loading && !ready) waitFunc = wfunc;
 					else wfunc();
 				};
@@ -305,7 +305,7 @@
 			// if queueing, return a function that the previous chain's waitFunc function can use to trigger this
 			// engine's queue. NOTE: this trigger function is captured and removed from the public chain API before return
 			publicAPI.trigger = function() {
-				var fn, idx=-1;
+				let fn, idx=-1;
 				while (fn = exec[++idx]) fn();
 				exec = [];
 			};
@@ -314,7 +314,7 @@
 		return publicAPI;
 	}
 	function processOpts(opts) {
-		var k, newOpts = {},
+		let k, newOpts = {},
 			boolOpts = {"UseCachePreload":"cache","UseLocalXHR":"xhr","UsePreloading":sPRELOAD,"AlwaysPreserveOrder":sPRESERVE,"AllowDuplicates":"dupe"},
 			allOpts = {"AppendTo":sWHICH,"BasePath":"base"}
 		;
